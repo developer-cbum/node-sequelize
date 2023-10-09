@@ -1,7 +1,6 @@
-const pool = require('../../database/pool');
-const PostQuery = require('../../query/posts/postQuery.js');
+const {tbl_post, tbl_member} = require('../../models/index');
 
-exports.getPost = async (postId) => {
+/* exports.getPost = async (postId) => {
   try {
     let data = await pool.query(PostQuery.getPost, [postId]);
     return data[0];
@@ -9,11 +8,23 @@ exports.getPost = async (postId) => {
     console.log(err);
     throw Error(err);
   }
-};
+}; */
 
 exports.getPosts = async (offset, limit) => {
   try {
-    let data = await pool.query(PostQuery.getPosts, [offset, limit]);
+    let data = await tbl_post.findAll({
+      attributes: ['post_title', "create_date"],
+      include : [
+        {
+         model : tbl_member,
+         attributes : ['member_name']
+        }
+      ],
+      // include : [tbl_member],
+      offset : offset,
+      limit : limit,
+    });
+    console.log(data)
     return data;
   } catch (err) {
     console.log(err);
@@ -21,6 +32,7 @@ exports.getPosts = async (offset, limit) => {
   }
 };
 
+/* 
 exports.insertPost = async (post) => {
   try {
     let result = await pool.query(PostQuery.insertPost, post);
@@ -50,3 +62,4 @@ exports.deletePost = async (postId) => {
     throw Error(err);
   }
 };
+ */

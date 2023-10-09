@@ -47,11 +47,11 @@ let listController = {
               <li>
                 <a href="/">
                   <div class="content-box">
-                    <div class="title">${data.postTitle}</div>
+                    <div class="title">${data.post_title}</div>
                     <div class="writer-wrap">
-                      <div class="writer">${data.memberName}</div>
+                      <div class="writer">${data.tbl_member.member_name}</div>
                       <span></span>
-                      <div class="register-time">${elapsedTime(data.createDate)}</div>
+                      <div class="register-time">${elapsedTime(data.create_date)}</div>
                     </div>
                   </div>
                 </a>

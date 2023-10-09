@@ -9,21 +9,21 @@ const MemberService = require('../../service/members/memberService');
     return res.status(500).json(err);
   }
 };
-
+ */
 exports.loginMember = async (req, res, next) => {
   let { memberEmail,memberPassword } = req.body;
   try {
-    let rows = await MemberService.loginMember(memberEmail,memberPassword);
-    req.session.memberId =rows[0].memberId;
-    if(req.session.loginCheck){
+    let row = await MemberService.loginMember(memberEmail,memberPassword);
+    req.session.memberId =row.dataValues.member_id;
+/*     if(req.session.loginCheck){
        rows[0].loginCheck = req.session.loginCheck;
        delete req.session.loginCheck;
-    }
-    return res.json(rows[0]);
+    } */
+    return res.json(row);
   } catch (err) {
     return res.status(500).json(err);
   }
-}; */
+};
 
 exports.checkMember = async (req, res, next) => {
   let { memberEmail } = req.body;

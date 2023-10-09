@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('tbl_member', {
+  const tbl_member = sequelize.define('tbl_member', {
     member_id: {
       autoIncrement: true,
       type: DataTypes.BIGINT,
@@ -49,4 +49,12 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+
+    tbl_member.associate = (models) => {
+      tbl_member.hasMany(models.tbl_post, {
+        foreignKey: 'member_id',
+      });
+    };
+
+    return tbl_member;
 };

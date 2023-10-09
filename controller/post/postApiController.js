@@ -1,6 +1,6 @@
-/* const PostService = require('../../service/posts/postService');
+const PostService = require('../../service/posts/postService');
 
-exports.getPost = async (req, res, next) => {
+/* exports.getPost = async (req, res, next) => {
   let { postId } = req.params;
   try {
     let rows = await PostService.getPost(postId);
@@ -8,7 +8,7 @@ exports.getPost = async (req, res, next) => {
   } catch (err) {
     return res.status(500).json(err);
   }
-};
+}; */
 
 exports.getPosts = async (req, res, next) => {
   let { offset, limit } = req.query;
@@ -16,13 +16,13 @@ exports.getPosts = async (req, res, next) => {
   const limitValue = parseInt(limit);
   try {
     let posts = await PostService.getPosts(offsetValue, limitValue);
-    return res.json(posts[0]);
+    return res.json(posts);
   } catch (err) {
     return res.status(500).json(err);
   }
 };
 
-exports.createPost = async (req, res, next) => {
+/* exports.createPost = async (req, res, next) => {
   let post = req.body;
   try {
     let postId = await PostService.insertPost(post);
