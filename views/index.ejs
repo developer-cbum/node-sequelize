@@ -1,0 +1,94 @@
+<%-include('./common/header-source.ejs')%>
+<div class="container">
+  <%-include('./common/header.ejs')%>
+  <section id="list-section">
+    <div class="content-wrap">
+      <div class="content-top">
+        <div>
+          <div class="post-list">게시글 목록</div>
+          <div class="post-total">0개</div>
+        </div>
+        <div class="post-btn-wrap">
+          <button type="button" class="post-btn btn btn-primary">게시글 등록</button>
+        </div>
+      </div>
+      <ul class="content-ul"></ul>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><button type="button" class="page-link"><</button></li>
+          <li class="page-item active"><button type="button" class="page-link">1</button></li>
+          <li class="page-item"><a class="page-link" href="/">2</a></li>
+          <li class="page-item"><a class="page-link" href="/">></a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+  <%-include('./common/footer.ejs')%>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="/js/common/elapsedTime.js"></script>
+<script>
+
+let listController = {
+  data : null,
+  $target : null,
+  init : function(target){
+      this.$target = target;
+      this.commonEvent(target)
+      this.getData();
+
+  },
+  bindListData : function(datas){
+    let text =``;
+    datas.forEach((data)=>{
+      const jsDate =new Date(data.createDate);
+      console.log(jsDate)
+      text +=`
+              <li>
+                <a href="/">
+                  <div class="content-box">
+                    <div class="title">${data.postTitle}</div>
+                    <div class="writer-wrap">
+                      <div class="writer">${data.memberName}</div>
+                      <span></span>
+                      <div class="register-time">${elapsedTime(data.createDate)}</div>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              `
+    })
+
+    this.$target.find('.content-ul').html(text)
+
+  },
+  getData : function(){
+      let offset = 0;
+      let limit = 10;
+      let _self = this;
+    $.ajax({
+            url: `/api/post?offset=${offset}&limit=${limit}`,
+            type: 'get',
+            success: function (data) {
+              console.log(data)
+              _self.bindListData(data);
+            },
+            error : function(){
+              alert("에러")
+            }
+          });
+  },
+  commonEvent : function(target){
+      target.find('.post-btn').on("click", (function(){
+          location.href = `/write`
+      }).bind(this))
+  }
+
+};
+
+(function(){
+  listController.init($('#list-section'))
+})()
+
+
+</script>

@@ -1,0 +1,23 @@
+<%-include('../common/header-source.ejs')%>
+<div class="container">
+    <%-include('../common/header.ejs')%>
+    <section>
+          <div class="write-wrap">
+              <div class="mb-3">
+                  <label for="post-title">제목</label>
+                  <input type="text" class="form-control" id="post-title" name="postTitle" placeholder="제목을 입력해주세요">
+              </div>
+              <div class="input-group mb-3">
+                  <input type="file" class="form-control" id="file" multiple>
+                  <label class="input-group-text" for="file">업로드</label>
+              </div>
+              <div class="mb-3">
+                  <label for="post-content">내용</label>
+                  <textarea class="form-control content-area" id="post-content" name="postContent" placeholder="내용을 입력해주세요"></textarea>
+              </div>
+              <div class="post-btn-container"><button type="button" class="btn btn-primary register-btn">게시글 등록</button></div>
+          </div>
+    </section>
+    <%-include('../common/footer.ejs')%>
+</div>
+<script src="/js/write.js"></script>
