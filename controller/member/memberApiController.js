@@ -15,10 +15,10 @@ exports.loginMember = async (req, res, next) => {
   try {
     let row = await MemberService.loginMember(memberEmail,memberPassword);
     req.session.memberId =row.dataValues.member_id;
-/*     if(req.session.loginCheck){
-       rows[0].loginCheck = req.session.loginCheck;
+    if(req.session.loginCheck){
+      row.dataValues.loginCheck = req.session.loginCheck;
        delete req.session.loginCheck;
-    } */
+    }
     return res.json(row);
   } catch (err) {
     return res.status(500).json(err);
