@@ -32,6 +32,19 @@ exports.getPosts = async (offset, limit) => {
   }
 };
 
+exports.getPostTotal = async () => {
+  try {
+    let data = await tbl_post.count();
+    console.log(data)
+    return data;
+  } catch (err) {
+    console.log(err);
+    throw Error(err);
+  }
+};
+
+
+
 /* 
 exports.insertPost = async (post) => {
   try {

@@ -14,11 +14,11 @@
       </div>
       <ul class="content-ul"></ul>
       <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><button type="button" class="page-link"><</button></li>
+        <ul id="paging-wrap" class="pagination">
+<!--           <li class="page-item"><button type="button" class="page-link"><</button></li>
           <li class="page-item active"><button type="button" class="page-link">1</button></li>
           <li class="page-item"><a class="page-link" href="/">2</a></li>
-          <li class="page-item"><a class="page-link" href="/">></a></li>
+          <li class="page-item"><a class="page-link" href="/">></a></li> -->
         </ul>
       </nav>
     </div>
@@ -32,17 +32,26 @@
 let listController = {
   data : null,
   $target : null,
+  option : {},
+  total : 0,
+  page : 1,
+  offset : 0,
   init : function(target){
       this.$target = target;
-      this.commonEvent(target)
       this.getData();
-
+      this.getTotal();
+      this.option.pageSize = 10;
+      this.option.pageCount = 5;
+      this.option.total = this.total;
+      this.option.$target = this.$target;
+      this.option.page = 1;
+      pagingController.init(this.option, this);
+      this.commonEvent(target)
   },
   bindListData : function(datas){
     let text =``;
     datas.forEach((data)=>{
       const jsDate =new Date(data.createDate);
-      console.log(jsDate)
       text +=`
               <li>
                 <a href="/">
@@ -63,15 +72,29 @@ let listController = {
 
   },
   getData : function(){
-      let offset = 0;
+      this.offset = 10 * (this.page - 1);;
       let limit = 10;
       let _self = this;
     $.ajax({
-            url: `/api/post?offset=${offset}&limit=${limit}`,
+            url: `/api/post?offset=${this.offset}&limit=${limit}`,
             type: 'get',
             success: function (data) {
-              console.log(data)
               _self.bindListData(data);
+            },
+            error : function(){
+              alert("에러")
+            }
+          });
+  },
+  getTotal : function(){
+    let _self = this;
+    $.ajax({
+            url: `/api/post/total`,
+            type: 'get',
+            async : false,
+            success: function (data) {
+              _self.total = data;
+              _self.$target.find('.post-total').html(data + "개")
             },
             error : function(){
               alert("에러")
@@ -82,6 +105,32 @@ let listController = {
       target.find('.post-btn').on("click", (function(){
           location.href = `/write`
       }).bind(this))
+
+      target.find('.page-item:not(.active):not(.next-btn):not(.prev-btn)').on("click", (function(e){
+        this.page = $(e.target).text()
+        this.option.page = $(e.target).text();
+        this.getData();
+        pagingController.init(this.option);
+        this.commonEvent(this.$target)
+      }).bind(this))
+
+      target.find('.prev-btn').on("click", (function(){
+        this.page = pagingController.startPage -1; 
+        this.option.page = pagingController.startPage -1;
+        this.getData();
+        pagingController.init(this.option);
+        this.commonEvent(this.$target)
+      }).bind(this))
+
+    
+      target.find('.next-btn').on("click", (function(){
+        this.page = pagingController.nextPage; 
+        this.option.page = pagingController.nextPage;
+        this.getData();
+        pagingController.init(this.option);
+        this.commonEvent(this.$target)
+      }).bind(this))
+
   }
 
 };

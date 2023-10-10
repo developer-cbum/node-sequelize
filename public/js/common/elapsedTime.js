@@ -4,11 +4,6 @@ function elapsedTime(date) {
 
     const diff = (end - start) / 1000;
 
-    console.log(start);
-    console.log(end);
-    console.log(end-start);
-    console.log(diff);
-
     const times = [
         { name: '년', milliSeconds: 60 * 60 * 24 * 365 },
         { name: '개월', milliSeconds: 60 * 60 * 24 * 30 },

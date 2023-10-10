@@ -21,6 +21,14 @@ exports.getPosts = async (req, res, next) => {
     return res.status(500).json(err);
   }
 };
+exports.getPostTotal = async (req, res, next) => {
+  try {
+    let total = await PostService.getPostTotal();
+    return res.json(total);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
 
 /* exports.createPost = async (req, res, next) => {
   let post = req.body;

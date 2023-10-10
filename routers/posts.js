@@ -10,6 +10,7 @@ router.get('/write', PostController.goToWrite);
 // router.get('/api/post/:postId', PostApiController.getPost);
 // router.post('/api/post', PostApiController.createPost);
 router.get('/api/post', PostApiController.getPosts);
+router.get('/api/post/total', PostApiController.getPostTotal);
 // router.patch('/:postId', PostApiController.updatePost);
 // router.delete('/:postId', PostApiController.deletePost);
 
