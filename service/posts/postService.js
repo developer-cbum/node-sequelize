@@ -1,19 +1,31 @@
 const {tbl_post, tbl_member} = require('../../models/index');
 
-/* exports.getPost = async (postId) => {
+exports.getPost = async (postId) => {
   try {
-    let data = await pool.query(PostQuery.getPost, [postId]);
-    return data[0];
+    let data = await tbl_post.findOne({
+      where: {
+        post_id : postId,
+      },
+      include : [
+        {
+        model : tbl_member,
+        attributes : ['member_name']
+        }
+      ],
+    });
+
+    console.log(data)
+    return data;
   } catch (err) {
     console.log(err);
     throw Error(err);
   }
-}; */
+};
 
 exports.getPosts = async (offset, limit) => {
   try {
     let data = await tbl_post.findAll({
-      attributes: ['post_title', "create_date"],
+      attributes: ['post_id','post_title', "create_date"],
       include : [
         {
          model : tbl_member,
@@ -24,7 +36,6 @@ exports.getPosts = async (offset, limit) => {
       offset : offset,
       limit : limit,
     });
-    console.log(data)
     return data;
   } catch (err) {
     console.log(err);

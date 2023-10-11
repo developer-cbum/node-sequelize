@@ -14,18 +14,12 @@
       </div>
       <ul class="content-ul"></ul>
       <nav aria-label="Page navigation example">
-        <ul id="paging-wrap" class="pagination">
-<!--           <li class="page-item"><button type="button" class="page-link"><</button></li>
-          <li class="page-item active"><button type="button" class="page-link">1</button></li>
-          <li class="page-item"><a class="page-link" href="/">2</a></li>
-          <li class="page-item"><a class="page-link" href="/">></a></li> -->
-        </ul>
+        <ul id="paging-wrap" class="pagination"></ul>
       </nav>
     </div>
   </section>
   <%-include('./common/footer.ejs')%>
 </div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="/js/common/elapsedTime.js"></script>
 <script>
 
@@ -54,7 +48,7 @@ let listController = {
       const jsDate =new Date(data.createDate);
       text +=`
               <li>
-                <a href="/">
+                <a href="/detail/${data.post_id}">
                   <div class="content-box">
                     <div class="title">${data.post_title}</div>
                     <div class="writer-wrap">

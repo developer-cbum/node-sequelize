@@ -2,18 +2,18 @@
 <link rel="stylesheet" type="text/css" href="/css/detail.css" />
 <div class="detail-container">
   <%-include('../common/header.ejs')%>
-  <section>
+  <section id="detail-section">
     <div class="detail-wrap">
       <div class="post-btn-wrap">
         <button type="button" class="btn btn-primary back-list">리스트로 돌아가기</button>
       </div>
       <div class="mb-3">
         <label for="title">제목</label>
-        <div class="form-control" id="title">제목</div>
+        <div class="form-control" id="title" data-bind-key="post_title">제목</div>
       </div>
       <div class="mb-3">
         <label for="writer">작성자</label>
-        <div class="form-control" id="writer">작성자</div>
+        <div class="form-control" id="writer" data-bind-key="tbl_member.member_name">작성자</div>
       </div>
       <div class="mb-3">
         <label for="formFile">첨부 파일</label>
@@ -44,7 +44,7 @@
       </div>
       <div class="mb-3">
         <label for="content">내용</label>
-        <div class="form-control last-content" id="content">
+        <div class="form-control last-content" id="content" data-bind-key="post_content">
           <pre>내용</pre>
         </div>
       </div>
@@ -64,3 +64,49 @@
   </section>
   <%-include('../common/footer.ejs')%>
 </div>
+
+<script>
+  let postDetailController ={
+      postId : null,
+      data : null,
+      $target : null,
+      init : function(target){
+          this.$target = target
+          this.postId = <%= postId %>
+          this.getData();
+      },
+      getData : function(){
+        let _self = this;
+        $.ajax({
+                url: `/api/post/detail/${this.postId}`,
+                type: 'get',
+                async : false,
+                success: function (data) {
+                  console.log(data)
+                  _self.data = data;
+                  _self.dataBind(data);
+                },
+                error : function(){
+                  alert("에러")
+                }
+              });
+      },
+      dataBind : function(data){
+        this.$target.find('[data-bind-key]').each((i, tag)=>{
+          if($(tag).data('bindKey').includes('.')){
+            let arr = $(tag).data('bindKey').split('.');
+            $(tag).text(data[arr[0]][arr[1]])
+          }
+          $(tag).text(data[$(tag).data('bindKey')]);
+        })
+      }
+  };
+
+  (function(){
+    const $detailSection = $('#detail-section')
+    postDetailController.init($detailSection);
+  })()
+
+
+
+</script>

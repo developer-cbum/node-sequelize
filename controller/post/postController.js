@@ -11,3 +11,7 @@ exports.goToWrite = function (req, res, next) {
     res.render('posts/write', { title: 'write', memberId : req.session.memberId });
   }
 };
+
+exports.goToDetail = function (req, res, next) {
+    res.render('posts/detail', { title: 'detail', memberId : req.session.memberId , postId : req.params.postId });
+};
