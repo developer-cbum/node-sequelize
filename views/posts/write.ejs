@@ -1,14 +1,14 @@
 <%-include('../common/header-source.ejs')%>
 <div class="container">
     <%-include('../common/header.ejs')%>
-    <section>
+    <section id="write-section">
           <div class="write-wrap">
               <div class="mb-3">
                   <label for="post-title">제목</label>
                   <input type="text" class="form-control" id="post-title" name="postTitle" placeholder="제목을 입력해주세요">
               </div>
               <div class="input-group mb-3">
-                  <input type="file" class="form-control" id="file" multiple>
+                  <input id="file-input" type="file" class="form-control" id="file" multiple>
                   <label class="input-group-text" for="file">업로드</label>
               </div>
               <div class="mb-3">
@@ -20,4 +20,52 @@
     </section>
     <%-include('../common/footer.ejs')%>
 </div>
-<script src="/js/write.js"></script>
+<script>
+    let writeController = {
+        $target : null,
+        form : null,
+        init: function($target){
+            this.$target = $target;
+            this.commonEvent();
+        },
+        commonEvent : function(){
+            this.$target.find('#file-input').on("change",(function(){
+                console.log("들어옴")
+                this.fileSaveRequest();
+            }).bind(this))
+        },
+        fileSaveRequest :function (){
+            this.form = new FormData();
+            console.log(this.$target.find('#file-input')[0].files[0])
+            if (this.$target.find('#file-input')[0].files[0]) {
+                this.form.append("file", this.$target.find('#file-input')[0].files[0]);
+            }
+
+            $.ajax({
+                type: 'post',
+                url: '/api/upload',
+                enctype: "multipart/form-data", //form data 설정
+                processData : false,
+                contentType : false,
+                data: this.form,
+                async: false,
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(e){		 //요청 실패시 에러 확인을 위함
+                    // handle error response
+                    console.log(e)
+                    alert(e.responseJSON.verboseMessage);
+                }
+            });
+
+        },
+        
+    };
+
+    (function(){
+        const $target = $('#write-section')
+        writeController.init($target)
+    })()
+
+</script>

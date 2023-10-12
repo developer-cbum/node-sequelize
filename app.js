@@ -4,6 +4,9 @@ const app = express();
 const routes = require('./routers');
 const session = require('express-session')
 const MemoryStore = require('memorystore')(session);
+const fs = require('fs');
+
+const uploadDir = "C:/uploads"; 
 
 app.use(express.json());
 
@@ -43,5 +46,9 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(app.get('port'), () => {
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+  }
   console.log(app.get('port'), '번 포트에서 대기 중');
 });
+
